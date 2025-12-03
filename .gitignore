@@ -1,0 +1,8 @@
+# SSH host keys (generated once, not committed)
+ssh_keys/
+
+# Optional local directories for development
+# These can be mounted as volumes instead of using Unraid shares
+home_dir/
+code_dir/
+code/
