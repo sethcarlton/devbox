@@ -142,3 +142,27 @@ By default, this container uses `docker exec` for access. For SSH/mDNS support:
    ```
 
 **Note:** Use `--network br0` (macvlan on Unraid) for mDNS to work. To access other Docker containers, add a second network: `docker network connect your-network devbox`
+
+## Publish Container
+
+Authorize with GitHub Container Registry if you haven't already using a personal access token
+
+```bash
+echo "$GHCR_PAT" | docker login ghcr.io -u "sethcarlton" --password-stdin
+```
+
+Build the container for ghcr
+
+```bash
+# build for ghcr
+docker build -t ghcr.io/sethcarlton/devbox:latest .
+
+# OR tag existing image
+docker tag devbox ghcr.io/sethcarlton/devbox:latest
+```
+
+Push the container to ghcr:
+
+```bash
+docker push ghcr.io/sethcarlton/devbox:latest
+```
