@@ -29,7 +29,7 @@ docker run -d --name devbox --hostname devbox devbox
 
 ### Example 2: Persistent Directories
 
-Your home directory and code persist in `~/devbox/` (or wherever you choose) on your host machine.
+Your directories persist in `~/devbox/` (or wherever you choose) on your host machine.
 
 **Setup:**
 
@@ -58,14 +58,6 @@ docker run -d \
 
 ### Example 3: Unraid With Persistent Share
 
-**Setup:**
-
-First, create an unraid share. Use a Cache pool instead of the Array. Here, we have named it `devbox`. Then, on the Unraid host, create your `home_dir` and `code` directories.
-
-```bash
-mkdir -p /mnt/user/devbox/home_dir /mnt/user/devbox/code
-```
-
 **Build:**
 
 _Important: Ensure Username, UID, and GID match an Unraid user who has access to the share (you can find these with the `id username` command in Unraid)._
@@ -78,16 +70,28 @@ docker build \
   -t devbox .
 ```
 
+**Setup:**
+
+First, create an unraid share. Use a Cache pool instead of the Array. Here, we have named it `devbox`. Then, on the Unraid host, create your `home_dir`.
+
+```bash
+mkdir -p /mnt/user/devbox/home_dir
+```
+
 **Run:**
 
-_Note the username in the home path map_
+_Notes:_
+
+- The username in the home volume path should match your Unraid user
+- The `/config` volume is optional — it enables auto-detection for tools like Tailscale that expect an appdata-style config directory
+- You could also mount a separate directory (eg. `/mnt/user/devbox/code:/code`) for code, but I just work out of `~/code`. This also simplifies permissions.
 
 ```bash
 docker run -d \
   --name devbox \
   --hostname devbox \
   -v /mnt/user/devbox/home_dir:/home/seth \
-  -v /mnt/user/devbox/code:/code \
+  -v /mnt/user/appdata/devbox:/config \
   devbox
 ```
 
@@ -110,7 +114,39 @@ This will:
 
 You can see what scripts are available in `/scripts`. They are all copied to the container at `/usr/local/bin/` and can be run ad-hoc.
 
-## Advanced: Remote Access (SSH & mDNS) HAVE NOT TESTED ANY OF THIS YET
+## Tailscale (Unraid)
+
+This covers Tailscale integration via Unraid's built-in Docker hook. You could also install Tailscale manually inside the container if instead.
+
+### How It Works
+
+The container starts as root to allow Unraid's Tailscale hook to run with proper privileges, then drops to your user for the main process.
+
+### Setup
+
+In your Unraid Docker template settings:
+
+1. Set **Use Tailscale** to `On`
+2. Set **Tailscale Hostname** to `devbox`
+3. Enable **Tailscale SSH**
+
+Then:
+
+5. Start the container and check the logs for the authentication link
+6. Authenticate via the link
+7. Disable key expiry for devbox in the [Tailscale admin console](https://login.tailscale.com/admin/machines)
+
+Once connected, you can reach devbox from any device on your Tailnet via its hostname or Tailscale IP.
+
+## Remote Workflow
+
+SSH in with `ssh devbox`, start your dev server with `--host`, and preview via `{tailscale-ip}:{port}` from any device on your Tailnet.
+
+Use tmux to keep sessions alive — run opencode or claude code, walk away, close your laptop, resume from anywhere.
+
+---
+
+## (SSH & mDNS) HAVE NOT TESTED ANY OF THIS YET
 
 By default, this container uses `docker exec` for access. For SSH/mDNS support:
 

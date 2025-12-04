@@ -8,6 +8,9 @@ ARG USERNAME=dev
 ARG USER_UID=1000
 ARG USER_GID=100
 
+# Make username available at runtime for privilege dropping
+ENV DEVBOX_USER=${USERNAME}
+
 # -----------------------------------------------------------------------------
 # BASE SYSTEM SETUP
 # -----------------------------------------------------------------------------
@@ -83,9 +86,10 @@ RUN chmod +x /tmp/devbox-scripts/*.sh && \
     rm -rf /tmp/devbox-scripts
 
 # -----------------------------------------------------------------------------
-# SWITCH USER
+# RUNTIME CONFIGURATION
 # -----------------------------------------------------------------------------
-USER ${USERNAME}
+# Container starts as root to allow Unraid Tailscale hook to run with privileges.
+# start.sh will drop to DEVBOX_USER after initialization.
 WORKDIR /home/${USERNAME}
 
 CMD ["/usr/local/bin/start.sh"]

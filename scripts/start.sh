@@ -2,29 +2,36 @@
 set -e
 
 # -----------------------------------------------------------------------------
-# Home Directory Initialization
+# Target User Configuration
+# -----------------------------------------------------------------------------
+# DEVBOX_USER is set in the Dockerfile via ENV
+TARGET_USER="${DEVBOX_USER:-dev}"
+TARGET_HOME="/home/${TARGET_USER}"
+
+# -----------------------------------------------------------------------------
+# Home Directory Initialization (runs as root)
 # -----------------------------------------------------------------------------
 # When using a persistent volume mount, the home directory may be empty.
 # This section copies default skeleton files if they don't exist.
 
-if [ -d "$HOME" ]; then
-    if [ ! -f "$HOME/.bashrc" ]; then
+if [ -d "$TARGET_HOME" ]; then
+    if [ ! -f "$TARGET_HOME/.bashrc" ]; then
         echo "Initializing home directory with default files..."
         
         if [ -d "/etc/skel" ]; then
-            cp -rn /etc/skel/. "$HOME/" 2>/dev/null || true
+            cp -rn /etc/skel/. "$TARGET_HOME/" 2>/dev/null || true
             echo "Default configuration files copied from /etc/skel"
         fi
-        
-        # Ensure proper ownership (in case running as root initially)
-        if [ "$(id -u)" = "0" ]; then
-            chown -R "$(stat -c '%u:%g' "$HOME")" "$HOME"
-        fi
+    fi
+    
+    # Ensure proper ownership
+    if [ "$(id -u)" = "0" ]; then
+        chown -R "${TARGET_USER}:" "$TARGET_HOME"
     fi
 fi
 
 # -----------------------------------------------------------------------------
-# Service Startup Script
+# Service Startup Script (runs as root)
 # -----------------------------------------------------------------------------
 
 # [FUTURE] mDNS / Avahi
@@ -36,11 +43,16 @@ fi
 # /usr/sbin/sshd -D &
 
 # -----------------------------------------------------------------------------
-# Main Process
+# Drop Privileges and Run Main Process
 # -----------------------------------------------------------------------------
 
 echo "Devbox container started."
-echo "User: $(whoami)"
+echo "User: ${TARGET_USER}"
 
-# Keep the container running indefinitely
-tail -f /dev/null
+# Drop to non-root user for the main process
+if [ "$(id -u)" = "0" ]; then
+    exec sudo -u "${TARGET_USER}" tail -f /dev/null
+else
+    # Already running as non-root user
+    exec tail -f /dev/null
+fi
