@@ -11,7 +11,7 @@ fi
 
 /usr/local/bin/install-tools.sh
 /usr/local/bin/setup-git.sh
-/usr/local/bin/setup-opencode.sh
+/usr/local/bin/configure-opencode.sh
 
 echo "=== Initialization Complete ==="
 echo ""
