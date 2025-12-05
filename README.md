@@ -3,8 +3,7 @@
 A personal, containerized development environment with optional support for:
 
 - Persistent home directory
-- SSH with mDNS (not tested yet)
-- Tailscale (not tested yet)
+- Tailscale
 - Unraid support
 
 ## Quick Start
