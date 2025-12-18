@@ -31,18 +31,6 @@ if [ -d "$TARGET_HOME" ]; then
 fi
 
 # -----------------------------------------------------------------------------
-# Service Startup Script (runs as root)
-# -----------------------------------------------------------------------------
-
-# [FUTURE] mDNS / Avahi
-# To enable mDNS (e.g. devbox.local), uncomment the following line:
-# service avahi-daemon start
-
-# [FUTURE] SSH Server
-# To enable the internal SSH server, uncomment the following line:
-# /usr/sbin/sshd -D &
-
-# -----------------------------------------------------------------------------
 # Drop Privileges and Run Main Process
 # -----------------------------------------------------------------------------
 

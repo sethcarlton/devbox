@@ -23,23 +23,7 @@ RUN apt-get update && \
     git \
     tmux \
     unzip \
-    # [FUTURE] Uncomment openssh-server and avahi-daemon to enable SSH and mDNS \
-    # openssh-server \
-    # avahi-daemon \
     && rm -rf /var/lib/apt/lists/*
-
-# -----------------------------------------------------------------------------
-# [FUTURE] SERVICE CONFIGURATION
-# -----------------------------------------------------------------------------
-# Avahi (mDNS) configuration
-# RUN sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf
-
-# SSH configuration
-# RUN mkdir /var/run/sshd
-# Uncomment to use persistent host keys (prevents "host identification changed" warnings on rebuild)
-# COPY ssh_keys/etc/ssh/ssh_host_* /etc/ssh/
-# Uncomment to disable root login and password authentication
-# COPY sshd_config.d/disable_root_and_passwords.conf /etc/ssh/sshd_config.d/
 
 # -----------------------------------------------------------------------------
 # USER CONFIGURATION
