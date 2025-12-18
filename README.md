@@ -3,8 +3,7 @@
 A personal, containerized development environment with optional support for:
 
 - Persistent home directory
-- SSH with mDNS (not tested yet)
-- Tailscale (not tested yet)
+- Tailscale
 - Unraid support
 
 ## Quick Start
@@ -102,7 +101,10 @@ docker run -d \
 Connect to the container and run the initialization script:
 
 ```bash
+# for root user
 docker exec -it devbox bash
+# or for specific user
+docker exec -it -u dev devbox bash
 init.sh
 ```
 
@@ -110,7 +112,7 @@ This will:
 
 - Install development tools (Node.js, Bun, OpenCode, etc.)
 - Configure Git (name, email, SSH key)
-- Optionally clone your OpenCode configuration
+- Optionally clone and initialize your dotfiles
 
 You can see what scripts are available in `/scripts`. They are all copied to the container at `/usr/local/bin/` and can be run ad-hoc.
 

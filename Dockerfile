@@ -1,17 +1,6 @@
 FROM ubuntu:latest
 
 # -----------------------------------------------------------------------------
-# BUILD ARGUMENTS
-# -----------------------------------------------------------------------------
-# Default user configuration
-ARG USERNAME=dev
-ARG USER_UID=1000
-ARG USER_GID=100
-
-# Make username available at runtime for privilege dropping
-ENV DEVBOX_USER=${USERNAME}
-
-# -----------------------------------------------------------------------------
 # BASE SYSTEM SETUP
 # -----------------------------------------------------------------------------
 # 'unminimize' restores man pages and documentation for a "real" system feel.
@@ -55,6 +44,11 @@ RUN apt-get update && \
 # -----------------------------------------------------------------------------
 # USER CONFIGURATION
 # -----------------------------------------------------------------------------
+ARG USERNAME=dev
+ARG USER_UID=1000
+ARG USER_GID=100
+ENV DEVBOX_USER=${USERNAME}
+
 # Remove the default ubuntu user to avoid conflicts with the UID (1000)
 RUN userdel -r ubuntu 2>/dev/null || true
 
@@ -88,8 +82,6 @@ RUN chmod +x /tmp/devbox-scripts/*.sh && \
 # -----------------------------------------------------------------------------
 # RUNTIME CONFIGURATION
 # -----------------------------------------------------------------------------
-# Container starts as root to allow Unraid Tailscale hook to run with privileges.
-# start.sh will drop to DEVBOX_USER after initialization.
-WORKDIR /home/${USERNAME}
+WORKDIR /
 
 CMD ["/usr/local/bin/start.sh"]
