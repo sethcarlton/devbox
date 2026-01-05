@@ -101,7 +101,8 @@ docker run -d \
 Connect to the container (or SSH in if Tailscale is already set up) and run the initialization script:
 
 ```bash
-docker exec -it -u dev devbox bash
+docker exec -it -u dev devbox zsh
+# or docker exec -it -u dev devbox bash
 init.sh
 ```
 
