@@ -14,6 +14,8 @@ RUN apt-get update && \
     apt-utils \
     language-pack-en \
     build-essential \
+    procps \
+    file \
     pkg-config \
     bzip2 \
     rsync \
@@ -21,7 +23,6 @@ RUN apt-get update && \
     curl \
     htop \
     git \
-    tmux \
     unzip \
     zsh \
     && rm -rf /var/lib/apt/lists/*
