@@ -3,9 +3,6 @@ FROM ubuntu:latest
 # -----------------------------------------------------------------------------
 # BASE SYSTEM SETUP
 # -----------------------------------------------------------------------------
-# 'unminimize' restores man pages and documentation for a "real" system feel.
-RUN yes | unminimize
-
 # Install core development tools and utilities
 RUN apt-get update && \
     apt-get upgrade -y && \
