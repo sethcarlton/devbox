@@ -23,6 +23,7 @@ RUN apt-get update && \
     git \
     tmux \
     unzip \
+    zsh \
     && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
@@ -42,7 +43,7 @@ RUN useradd ${USERNAME} \
     --gid ${USER_GID} \
     --groups users,sudo \
     --create-home \
-    --shell /bin/bash
+    --shell /bin/zsh
 
 # Enable passwordless sudo for the user
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
