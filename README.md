@@ -98,23 +98,20 @@ docker run -d \
 
 ### First-Time Setup
 
-Connect to the container and run the initialization script:
+Connect to the container (or SSH in if Tailscale is already set up) and run the initialization script:
 
 ```bash
-# for root user
-docker exec -it devbox bash
-# or for specific user
 docker exec -it -u dev devbox bash
 init.sh
 ```
 
-This will:
+Available scripts:
 
-- Install development tools (Node.js, Bun, OpenCode, etc.)
-- Configure Git (name, email, SSH key)
-- Optionally clone and initialize your dotfiles
+- `init.sh` — runs dotfiles.sh (entry point)
+- `dotfiles.sh` — sync dotfiles using the bare repo method
+- `configure-git.sh` — configure git name/email and generate SSH key
 
-You can see what scripts are available in `/scripts`. They are all copied to the container at `/usr/local/bin/` and can be run ad-hoc.
+See [my dotfiles](https://github.com/sethcarlton/dotfiles) for docs on initializing tools.
 
 ## Tailscale (Unraid)
 

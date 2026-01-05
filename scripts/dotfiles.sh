@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Dotfiles Configuration ==="
+echo "=== Dotfiles Configuration (bare repo method) ==="
 echo ""
 
 dot() {
@@ -18,7 +18,6 @@ checkout_dotfiles() {
     fi
 }
 
-# Check if dotfiles already configured
 if [ -d ~/.dotfiles ]; then
     echo "Dotfiles already cloned, pulling latest..."
     dot pull origin main || dot pull origin master || echo "Warning: Could not pull from remote"
@@ -33,13 +32,26 @@ if [ -z "$dotfiles_repo" ]; then
     exit 0
 fi
 
-# Clone bare repo
+if [[ "$dotfiles_repo" == git@* ]] && [ ! -f ~/.ssh/id_ed25519 ]; then
+    echo ""
+    echo "SSH URL detected but no SSH key found."
+    read -p "Run configure-git.sh first? (y/n, or use HTTPS instead): " configure_git
+    if [[ "$configure_git" == "y" ]]; then
+        /usr/local/bin/configure-git.sh
+    else
+        read -p "Enter your dotfiles repo URL: " dotfiles_repo
+    fi
+fi
+
+if [ -z "$dotfiles_repo" ]; then
+    echo "Skipping dotfiles sync"
+    exit 0
+fi
+
 git clone --bare "$dotfiles_repo" ~/.dotfiles
 
-# Hide untracked files
 dot config status.showUntrackedFiles no
 
-# Checkout dotfiles
 checkout_dotfiles
 
 echo "Dotfiles synced from $dotfiles_repo"
