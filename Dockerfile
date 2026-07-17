@@ -11,6 +11,7 @@ RUN apt-get update && \
     apt-utils \
     language-pack-en \
     build-essential \
+    python3 \
     pkg-config \
     bzip2 \
     rsync \
