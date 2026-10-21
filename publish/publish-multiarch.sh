@@ -22,6 +22,8 @@ fi
 echo -e "${GREEN}Building and pushing multi-arch image: ${IMAGE_NAME}${NC}"
 
 docker buildx build \
+    --no-cache \
+    --pull \
     --platform "${PLATFORMS}" \
     --tag "${IMAGE_NAME}" \
     --push \

@@ -24,6 +24,8 @@ fi
 echo -e "${GREEN}Building and pushing image: ${UNRAID_IMAGE_NAME}${NC}"
 
 docker buildx build \
+    --no-cache \
+    --pull \
     --platform "${UNRAID_PLATFORM}" \
     --build-arg USERNAME="${UNRAID_USER}" \
     --build-arg USER_UID="${UNRAID_UID}" \

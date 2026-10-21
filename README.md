@@ -15,7 +15,7 @@ Home directory, code, and user data is wiped when the container is removed. Good
 **Build:**
 
 ```bash
-docker build -t devbox .
+docker build --no-cache --pull -t devbox .
 ```
 
 **Run:**
@@ -39,7 +39,7 @@ mkdir -p ~/devbox/home_dir ~/devbox/code
 **Build:**
 
 ```bash
-docker build -t devbox .
+docker build --no-cache --pull -t devbox .
 ```
 
 **Run:**
@@ -63,6 +63,8 @@ _Important: Ensure Username, UID, and GID match an Unraid user who has access to
 
 ```bash
 docker build \
+  --no-cache \
+  --pull \
   --build-arg USERNAME=seth \
   --build-arg USER_UID=1000 \
   --build-arg USER_GID=100 \
