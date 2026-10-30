@@ -9,6 +9,8 @@ on:
       - scripts/**
       - .github/workflows/publish-unraid.yml
   workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays 09:00 UTC
 
 permissions:
   contents: read
@@ -38,6 +40,8 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
+          pull: true
+          no-cache: true
           tags: ghcr.io/sethcarlton/devbox:unraid
           build-args: |
             USERNAME=seth
