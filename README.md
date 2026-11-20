@@ -140,8 +140,18 @@ Then:
 
 Once connected, you can reach devbox from any device on your Tailnet via its hostname or Tailscale IP.
 
+## Rex
+
+The container's main process is a [Rex](https://superlogical.com/rex) server with its own Tailscale node, named `{hostname}-rex`. The container runs without signing in. To reach Rex from your other devices, get the sign-in link and open it once:
+
+```bash
+rex server tailscale login
+```
+
+The login is stored in `~/.local/state/rex`, so it survives rebuilds when the home directory is persistent.
+
 ## Remote Workflow
 
 SSH in with `ssh devbox`, start your dev server with `--host`, and preview via `{tailscale-ip}:{port}` from any device on your Tailnet.
 
-Use tmux to keep sessions alive — run opencode or claude code, walk away, close your laptop, resume from anywhere.
+Use Rex sessions to keep work alive: run opencode or claude code, walk away, close your laptop, and resume from your Mac or phone.

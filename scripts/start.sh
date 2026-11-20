@@ -37,10 +37,14 @@ fi
 echo "Devbox container started."
 echo "User: ${TARGET_USER}"
 
+# The Rex server is the main process, so the container stops if it does.
+# --tailscale runs Rex's own tailnet node; its login persists in the home volume.
+REX_SERVER=(rex server run --tailscale --tailscale-hostname "$(hostname)-rex")
+
 # Drop to non-root user for the main process
 if [ "$(id -u)" = "0" ]; then
-    exec sudo -u "${TARGET_USER}" tail -f /dev/null
+    exec sudo -H -u "${TARGET_USER}" "${REX_SERVER[@]}"
 else
     # Already running as non-root user
-    exec tail -f /dev/null
+    exec "${REX_SERVER[@]}"
 fi

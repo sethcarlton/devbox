@@ -55,6 +55,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
+# REX
+# -----------------------------------------------------------------------------
+# start.sh runs the Rex server as the main process. The script adds Rex's apt
+# repo, so each image rebuild picks up the latest release.
+RUN curl -fsSL https://pkgs.superlogical.com/rex/install.sh | sh && \
+    rm -rf /var/lib/apt/lists/*
+
+# -----------------------------------------------------------------------------
 # ENTRYPOINT & SETUP SCRIPTS
 # -----------------------------------------------------------------------------
 COPY scripts/ /tmp/devbox-scripts/
