@@ -40,8 +40,13 @@ echo "User: ${TARGET_USER}"
 # The Rex server is the main process, so the container stops if it does.
 # --tailscale runs Rex's own tailnet node; its login persists in the home volume.
 # Tailscale ACLs decide who may connect, so the node still works once it is
-# tagged and has no owner.
-REX_SERVER=(rex server run --tailscale --tailscale-hostname "$(hostname)-rex" --tailscale-allow-tailnet-members)
+# tagged and has no owner. Advertising the tag keeps a fresh sign-in from
+# joining as an untagged device with the signing user's full access.
+REX_SERVER=(
+    rex server run --tailscale --tailscale-hostname "$(hostname)-rex"
+    --tailscale-allow-tailnet-members
+    --tailscale-advertise-tag tag:sandbox
+)
 
 # Drop to non-root user for the main process
 if [ "$(id -u)" = "0" ]; then
